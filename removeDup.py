@@ -1,21 +1,20 @@
-#hashlib for hashing and os for os operations
 import hashlib
 import os
 
 '''
 Removes the given file and returns its size
 Input: file(file path)
-Output: size(size of the file)
+Output: size(size of the file in bytes)
 '''
 def calcSizeAndDel(file):
     size = os.path.getsize(file)
     os.remove(file)
     return size
 '''
-Appends same files to the list belongs to specific key(same md5 checksum) in the dictionary.
+Appends same files to the list belongs to a specific key(same md5 checksum) in the dictionary.
 Input: dupDict(dictionary data structure), dirPath(path of the directory)
 '''
-def findDups(dupDict, dirPath):
+def createDict(dupDict, dirPath):
 #traverse the folder recursively, that is, including subfolders
     for dirName, subdirList, fileList in os.walk(dirPath):
         for fname in fileList:
@@ -37,7 +36,7 @@ def findDups(dupDict, dirPath):
                 else:
                     dupDict[md5Hash] = [fullPath]
 '''
-Finds duplicate files, removes the ones created later. Keeps the original file. Returns the size of deleted files.
+Finds duplicate files, removes the ones created later. Keeps the original file. Returns the size of the deleted files.
 Input: dupDict(dictionary data structure)
 Output: totalSize(total size of the deleted files)
 '''
@@ -68,11 +67,13 @@ def main():
 #initializing dictionary data structure to keep duplicates as key-value pairs
     dupDict = dict()
 #calling functions
-    findDups(dupDict, dirPath)
+    createDict(dupDict, dirPath)
     totalSize = removeDups(dupDict)
 #convert "bytes" to "megabytes" and limit to two decimal points
     print("Recovered:%.2f MBs" % (totalSize/(1024**2)))
 
-#run main
+'''
+Run the main above
+'''
 if __name__ == "__main__":
     main()
